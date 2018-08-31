@@ -1,0 +1,131 @@
+
+
+如何把一个对象进行永久的保存?
+
+【用有规律的字符串代表一个对象】
+
+ 如想保存 Student stu = new Student(1, "张飞", 19, 178.5);
+ 这样的学生对象
+ 可以用 
+ 1,张飞,19,178.5
+ 保存
+
+
+【序列化】
+
+ 1. 概念：把一个对象的状态信息转化成可以保存或者传输的形式的过程
+
+ 2. 序列化: 对象转化成二进制
+   反序列化:二进制转化成对象
+
+ 3. 注意点:
+  a. 要序列化的对象必须实现 Serializable 接口
+  b. 这个对象依赖的类型全部都要实现 Serializable 接口
+
+
+【XML】
+ Extensible Markup Language 
+ 1. 可扩展标记语言
+
+ 2. 作用: 将数据转化成XML后,可以真正实现数据的跨平台共享
+  不同的语言中,解析XML的方式都是一致的
+
+ 3. 语法规则: <a>
+   1) 所有元素必有关闭标签  <a />  <a></a>
+   2) 大小写敏感 <a> <A> 是不同的标记
+   3) 必须正确的嵌套
+    <a><b></a></b> 是错误的
+   4) 必须有根元素
+    	<root>
+		<a></a>
+		<b></b>
+	</root>
+   5) 属性值必须加引号
+	<student id="1" />
+
+   6) 空格会被保留
+
+
+ 4. 举例
+<?xml version="1.0" encoding="utf-8"?>
+
+<stulist>
+  <student id="1">
+    <name>张飞</name>
+    <age>19</age>
+    <height>178.5</height>
+  </student>
+  <student id="2">
+    <name>关羽</name>
+    <age>20</age>
+    <height>200.1</height>
+  </student>
+  <student id="3">
+    <name>刘备</name>
+    <age>21</age>
+    <height>160.9</height>
+  </student>
+  <student id="4">
+    <name>黄忠</name>
+    <age>59</age>
+    <height>175.3</height>
+  </student>
+  <student id="5">
+    <name>赵云</name>
+    <age>17</age>
+    <height>180.1</height>
+  </student>
+</stulist>
+
+ 5. XML 解析
+
+   1) DOM解析
+
+    将XML文档内容一次性读入内存
+    然后对文档进行树形建模分析节点信息
+    一步步读取到最后文本类型节点内容
+ 
+    优点: 可以进行随机读取
+    缺点: 占用内存较大
+
+   2) SAX解析
+    
+    用事件流的方式进行解析
+
+    优点: 占内存小
+    缺点: 不能随机读取, 只读只进
+
+
+【json】
+ 
+ 1. 一种轻量级数据交换格式
+
+ 2. 语法:
+ : 表示一对键值对
+ , 分割键值对
+ {} 表示一个对象
+ [] 表示一个数组
+
+
+ 3. 举例
+ new Student(1, "张飞", 19, 178.5)
+ 
+ [{"id":"1", "name":"张飞", "age":"19", "height":"178.5"},
+ {"id":"1", "name":"张飞", "age":"19", "height":"178.5"},
+ {"id":"1", "name":"张飞", "age":"19", "height":"178.5"}]
+
+
+ 4. www.json.org
+
+
+ 5. json 和 XML的比较
+  json对于XML来说,数据体积较小
+  json对于数据的描述性比XML较低
+  json的速度远远高于XML
+  json与js无缝交互
+  解析手段同样丰富
+
+ 
+
+
+

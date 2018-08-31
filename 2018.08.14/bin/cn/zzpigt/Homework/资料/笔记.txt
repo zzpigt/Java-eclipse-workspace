@@ -1,0 +1,155 @@
+
+【容器】 集合、类集、集合框架
+
+ 1. 概念：一组类和接口，用来实现常见的数据结构
+
+ 程序 = 算法 + 数据结构
+
+ 算法：解决问题的步骤
+
+ 数据结构： 保存数据的方式（若干个数据）
+
+ 2. 容器的分类
+
+ Collection 集合
+  |-- List  列表： 可以重复的，有序的，有索引
+  |
+  |-- Set   集：不能重复的，无序的，没有索引
+
+ Map 字典集
+
+
+ * 有序指的是输出的顺序和输入的顺序一致
+
+ 3. List的实现类
+
+  ArrayList：可变数组，底层是物理地址连续的数组，随机访问速度很快，
+	但是添加、删除、修改元素可能会导致元素集体赋值，数组扩容很操作，效率非常低
+
+  LinkedList：双向循环链表，底层是不连续的节点组成。随机访问要靠节点不断寻址，效率低下。
+	但是添加、删除、修改元素只要修改前后两个节点的指向即可，效率很高，
+	特别是针对头尾节点的操作，效率特别高
+
+
+ 4. 集合的遍历
+
+   1）for循环中用get方法遍历
+	依赖于索引，而且不能在遍历中删除
+
+   2）迭代器遍历
+	不依赖于索引，通用性高，而且可以在遍历中删除
+
+   3）for each循环（增强版for循环）
+	底层还是使用迭代器遍历
+	效率同2
+	1.5的新特性
+	不能在遍历中删除
+
+【Collections】
+  集合工具类
+
+  里面有很多用于操作Collection对象的静态方法
+ 
+1. 常用方法
+  swap  交换元素位置
+  reverse  反转
+  shuffle  打乱
+2. 排序
+  static <T extends Comparable<? super T>> void sort(List<T> list)
+	按照元素的自然顺序排序
+	自然顺序：实现了Comparable接口的对象具有的顺序
+
+  static <T> void sort(List<T> list, Comparator<? super T> c)
+	指定比较器排序
+	比较器：Comparator的实现类
+	这个时候T类型就可以不具备自然顺序，但是指定的比较器必须可以对T类型对象进行排序
+
+
+【Set 接口】
+ 
+ 集，一个不包含重复元素的集合
+
+ 1. 特点：
+	不包含重复元素
+	没有索引（无序）
+ 2. 实现类
+	HashSet：由哈希表支持的Set，具有非常高的访问速度
+
+	TreeSet：SortedSet的唯一实现类，可以根据元素自然顺序排序，
+		也可以指定比较器
+
+ 3. HashSet如何判断2个对象是否是同一个对象
+	先判断hashCode是否相等，
+	如果hashCode不相等，那就不是同一个对象
+	如果hashCode相等，就根据equals的结果判断
+
+	* 为什么重写equals之后一定要重写hashCode？
+	因为equals是用来两个对象是否相等的，
+	重写了equals会导致原来地址不同的对象也可能会相等，
+	这样的2个对象不重写hashCode
+	它们的hash值必然不等
+
+	当保存到hashSet的时候，先判断不相等的hashCode，
+	就立即把2个对象都放入了集合
+	导致程序出错
+
+ 4. HashSet的优势
+	boolean contains(Object o) 
+
+	为了完全发挥这个方法的优势，最好把不想等的对象的hachCode值尽可能的不一致
+
+ 5. TreeSet
+	1) 排序过的的Set
+	2) 里面放的元素必须实现Comparable
+	3) 如何判断2个元素是否相等的呢？
+		通过compareTo方法的返回值
+		如果返回 > 0 表示this大
+		如果返回 < 0 表示this小
+		如果返回 == 0 表示同一个对象
+
+ 6. TreeSet的优势
+	用于比较的时候，效率比较高
+
+
+【Map 字典集】
+	1. key-value结构
+		键-值对结构
+
+	2. key不能重复，value可以重复
+
+
+	3. 
+	HashMap：最常用的map本质，就是对hash值进行存储的map
+	TreeMap：SortedMap的唯一实现类，可以按照key的自然顺序排序，也可以指定比较器
+
+	4. map的遍历
+		1）KV都要 - entrySet
+		Set<Entry<String,Integer>> entrySet = map.entrySet();
+		for (Entry<String, Integer> entry : entrySet) {
+			System.out.println(entry.getKey() + " - " + entry.getValue());
+		}
+		
+		2）只要K，或者 只要V
+		Set<String> keySet = map.keySet();
+		for (String key : keySet) {
+			System.out.println(key);
+		}
+		
+		Collection<Integer> values = map.values();
+		for (Integer value : values) {
+			System.out.println(value);
+		}
+		
+		3）如果希望兼容低版本，或者是在遍历时删除
+		Iterator<Entry<String, Integer>> iterator = map.entrySet().iterator();
+		while(iterator.hasNext()) {
+			Entry<String, Integer> entry = iterator.next();
+			System.out.println(entry.getKey() + " - " + entry.getValue());
+		}
+		
+		4）
+	 
+
+
+
+ 

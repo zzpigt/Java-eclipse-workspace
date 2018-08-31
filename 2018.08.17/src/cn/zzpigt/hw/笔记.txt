@@ -1,0 +1,62 @@
+
+【文件】
+ 
+ java.io.File
+ 表示文件或文件夹
+
+ 1. 文件操作
+ 创建
+ 删除
+ 重命名
+
+ 2. 绝对路径和相对路径
+ 绝对路径: 从盘符开始的路径
+ 相对路径: 从当前路径开始的路径
+
+ 3. 文件夹
+ 创建 
+	mkdir	创建一级目录
+	mkdirs	创建多级目录
+ 删除
+	只能删除空目录
+
+ 重命名
+
+ 4. 获取文件的基本信息
+
+ 5. 遍历文件夹(默写)
+
+	public static void printAll(File dir){
+		
+		File[] files = dir.listFiles();
+		if(files != null){
+			for(File f : files){
+				System.out.println(f.getName());
+				if(!f.isFile()){
+					printAll(f);
+				}	
+			}
+		}		
+
+	}
+
+
+ 6. 删除目录(默写)
+
+	public static void delete(File file){
+		if(!file.isFile()){
+			File[] files = file.listFiles();
+			if(files != null){
+				for(File f:files){
+					delete(f);
+				}
+			}
+		}	
+	
+		file.delete();
+	}
+
+
+
+	
+

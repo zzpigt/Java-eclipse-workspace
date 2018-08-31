@@ -1,0 +1,32 @@
+
+
+#1. 
+ Object类中有两个和对象是否相等有关的方法
+ 重写后的equals效率较低 重写后的hashCode效率较高
+
+ 请设计一个比较两个对象是否相等的最高效的方案
+
+ * 好的程序：保证结果准确下，提高效率
+
+
+2. 优化一下LinkedList中的get方法，用比较好的方向去寻找对应元素
+
+
+3. 设计一个工具类 ListUtil，完成3个方法的设计
+
+	class ListUtil{
+		
+		// 交换i和j两个元素的位置
+		public static void swap(List list, int i, int j);
+
+		// 元素顺序逆序（反转）
+		public static void reverse(List list);
+
+		// 排序（升序）
+		public static void sort(List<Integer> list);
+		
+	}
+
+	* 注意，做完测试的时候无论是ArrayList还是LinkedList要求都没有问题
+
+

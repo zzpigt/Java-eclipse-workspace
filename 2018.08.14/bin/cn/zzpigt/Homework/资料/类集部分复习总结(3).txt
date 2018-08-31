@@ -1,0 +1,18 @@
+1. TreeSet自定义排序的方式：
+	1).元素本身实现排序算法，做法元素类。比如Person自身实现Comparable接口，实现抽象方法compareTo(Object o)
+		这种方式实现类Person本身也要参与比较
+	2).由TreeSet的对象来实现比较功能，做法，通过Comprator接口的实现类对象来构造TreeSet对象，
+		实现compare(Object o1,Object o2)
+		这种方式比较算法的实现类本身不参与比较
+
+2.Map接口：映射接口,特点是以键值对形式来存放数据的
+	常用方法：
+		增(put)、删(remove)、改(put)、查(get)功能
+		返回Set或者Collection的函数：返回所有key(keySet)、返回所有value(values)、返回所有的映射关系(entrySet)
+		clear、containsKey、containsValue、size
+3.HashMap：
+	注意：
+		1).key不能重复、value可以重复
+		2).key和value都可以为null
+		3).当get(key)中key不存在的时候，返回值也为null
+		4).通常情况下我们都把key设置为String类型

@@ -1,0 +1,16 @@
+
+1. 封装一个方法,复制文件
+
+	public static void copy(File src, File dest){
+
+	}
+
+2. 改进刚才的复制方案
+ 用缓冲区读取
+
+
+3. 用字符流复制文本文件
+
+	public static void copy(File src, File dest){
+
+	}

@@ -1,0 +1,12 @@
+
+1. 完成ArrayList.doc 和 LinkedList.doc
+
+#2. 阅读API，自学一些常见的数据结构
+ java.util.Vector<E>	
+ 向量
+ 
+ 
+ java.util.Stack<E>	栈
+ 
+ 
+ java.util.Queue<E>	队列

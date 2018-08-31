@@ -1,0 +1,53 @@
+
+1. 测试一下静态属性和方法如何用反射调用
+
+2. 通过类的对象反向生成java代码
+ 
+ public static void makeJavaFile(Object obj);
+
+ 假设传进来的obj是是一个学生对象
+ 	public class Student{
+		private String name;
+		private int age;
+
+		// get set方法
+	}
+
+
+#3. 通过类的对象, 生成对应XML文件
+ public static String toXML(Object obj);
+
+ 假设传进来的obj是是一个学生对象
+ <Student>
+	<name>张三</name>
+	<age>18</age>
+ </Student>
+
+
+ ## 考虑类型嵌套的情况
+
+ 	class Student{
+		private String name;
+		private Dog dog;
+	}
+
+	class Dog{
+		private String name;
+	}
+
+
+
+ <Student>
+	<name>张三</name>
+	<Dog>
+		<name>mike</name>
+	</Dog>
+ </Student>
+
+
+
+#4. 通过反射, 动态生成建表和插入语句
+
+
+
+

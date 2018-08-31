@@ -1,0 +1,15 @@
+
+1. 去了解一下栈和队列这两种数据结构
+栈：先进后出
+队列：先进先出
+
+
+2：简述List、Set、Map的区别。
+list和set
+
+
+3：简述Collection和Collections的区别。
+
+4：简述ArrayList、Vector、LinkedList的区别。
+
+5：简述HashTable和HashMap的区别。

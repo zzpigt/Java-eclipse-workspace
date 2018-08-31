@@ -1,0 +1,12 @@
+1.Set的特点：
+	不重复：内部通过equals方法来判断元素是否相等
+	无序性：指的是元素的添加顺序和迭代出来的顺序不一定相等
+2.HashSet：完全继承了Set或者Collection里的方法实现
+	add、addAll、clear、isEmpty、size、contains、iteretor、remove等
+3.TreeSet：对Set接口功能做了极大扩展，并且具有排序功能
+	新增了很多方法：
+		first(取第一个元素)、last(取最后一个元素)、
+		pollFirst(获取并移除第一个元素)、pollLast(获取并移除最后一个元素)、
+		ceiling(获取该Set中大于等于指定值的最小元素)、floor(获取该Set中小于等于指定值的最大元素)、
+		higher(获取该Set中严格大于指定值的最小元素)、lower(获取该Set中严格小于指定值的最大元素)、
+		headSet(开头一段子集)、tailSet(结尾一段子集)、subSet(中间一段子集)

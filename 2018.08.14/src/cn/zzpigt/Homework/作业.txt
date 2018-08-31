@@ -1,0 +1,14 @@
+
+1. 完成ArrayList.doc 和 LinkedList.doc
+
+#2. 阅读API，自学一些常见的数据结构
+ java.util.Vector<E>	
+ java.util.Stack<E>	栈
+ java.util.Queue<E>	队列
+
+
+#3. LinkedHashSet有什么特点？
+
+4. 完成HashSet TreeSet HashMap
+ 
+5. 完成简述题作业

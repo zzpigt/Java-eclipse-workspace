@@ -1,0 +1,15 @@
+1.类集：指一组接口和类
+
+2.Collection：添加add、删除remove、迭代iterator、清除clear、长度size、
+
+3.List：新增了添加、查询get(int index)、删除、修改方法、获取元素首次或最后一次出现位置、列表迭代器listIterator
+	（其实就是新增了根据索引位置操作元素的方法）
+
+4.Set：同Collection一样，没有新增功能
+
+5.ArrayList：ensureCapacity(int minCapacity)确保能容纳指定容量个数元素、受保护方法removeRange(int fromIndex, int toIndex) 
+	、实际容量调整为当前列表大小trimToSize()（线程不安全）
+
+6.LinkedList：新增了大量操作开头First和结尾Last元素的方法和逆向迭代方法(线程不安全)
+
+7.Vector：功能同ArrayList基本相同，JDK1.2开始实现List接口，不过基本被ArrayList取代(线程安全)

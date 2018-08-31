@@ -1,0 +1,47 @@
+
+
+【public boolean equals(Object obj)】
+Object类中默认的实现方式是  :   return this == obj  。那就是说，只有this 和 obj引用同一个对象，才会返回true。
+
+而我们往往需要用equals来判断 2个对象是否等价，而非验证他们的唯一性。这样我们在实现自己的类时，就要重写equals.
+
+按照约定，equals要满足以下规则。
+
+自反性:  x.equals(x) 一定是true
+
+对null:  x.equals(null) 一定是false
+
+对称性:  x.equals(y)  和  y.equals(x)结果一致
+
+传递性:  a 和 b equals , b 和 c  equals，那么 a 和 c也一定equals。
+
+一致性:  在某个运行时期间，2个对象的状态的改变不会不影响equals的决策结果，
+         那么，在这个运行时期间，无论调用多少次equals，都返回相同的结果。
+
+【public int hashCode()】
+这个方法返回对象的散列码，返回值是int类型的散列码。
+对象的散列码是为了更好的支持基于哈希机制的Java集合类，例如 Hashtable, HashMap, HashSet 等。
+
+关于hashCode方法，一致的约定是：
+1. 重写了equals方法的对象必须同时重写hashCode()方法。
+
+2. 如果2个对象通过equals调用后返回是true，那么这个2个对象的hashCode方法也必须返回同样的int型散列码
+
+3. 如果2个对象通过equals返回false，他们的hashCode返回的值允许相同。
+(然而，程序员必须意识到，hashCode返回独一无二的散列码，会让存储这个对象的hashtables更好地工作。)
+
+
+【使用情况总结】
+1、equals方法用于比较对象的内容是否相等（覆盖以后）
+
+2、hashcode方法只有在集合中用到
+
+3、当覆盖了equals方法时，比较对象是否相等将通过覆盖后的equals方法进行比较（判断对象的内容是否相等）。
+
+4、将对象放入到集合(Set)中时，首先判断要放入对象的hashcode值与集合中的任意一个元素的hashcode值是否相等，
+ 如果不相等直接将该对象放入集合中。
+ 如果hashcode值相等，然后再通过equals方法判断要放入对象与集合中的任意一个对象是否相等，
+ 如果equals判断不相等，直接将该元素放入到集合中，否则不放入。
+
+
+

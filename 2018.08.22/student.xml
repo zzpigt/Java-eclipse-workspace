@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stulist>
+<student id="1">
+<name>童</name>
+<age>12</age>
+<height>170.0</height>
+</student>
+<student id="2"><name>tjw2</name><age>15</age><height>171.2</height></student><student id="3"><name>tjw3</name><age>17</age><height>173.0</height></student><student id="4"><name>tjw4</name><age>19</age><height>172.0</height></student><student id="5"><name>tjw5</name><age>12</age><height>178.0</height></student></stulist>

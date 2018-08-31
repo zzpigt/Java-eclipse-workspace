@@ -1,0 +1,53 @@
+
+【IO流】
+
+ 用来进行硬盘和内存数据交换的对象
+
+ 根据方向分类：
+
+ 输入流: 方向是流进内存
+
+ 输出流: 方向是从内存中流出去的
+
+ 根据操作的数据类型分类:
+
+ 字符流: 只能处理字符类型(文本型)数据
+
+ 字节流: 任意类型数据
+
+【字节流】
+
+ 1. 最大的抽象父类:
+	InputStream : 输入流
+	OutputStream : 输出流
+
+ 2. 用于读写文件的字节流 (具体的流)
+	FileInputStream: 文件输入流
+	FileOutputStream: 文件输出流
+
+ 3. 带缓冲的字节流
+	BufferedInputStream: 带缓冲的字节输入流
+	BufferedOutputStream:带缓冲的字节输出流
+
+ * 带缓冲的流写完数据后必须 刷新！ flush();
+
+
+【字符流】
+
+ 1. 只能处理字符类型数据
+
+ 2. 本质也是字节流(加了个码表)
+
+ 3. 最大的抽象父类
+	Reader: 字符输入流
+	Writer: 字符输出流
+
+ 3. 创建字符流的方式
+	a. 具体的字符流(FileReader FileWriter)
+	b. 字节流转成字符流(InputStreamReader OutputStreamWriter)
+
+
+
+
+
+

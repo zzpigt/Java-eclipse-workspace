@@ -1,0 +1,44 @@
+package cn.zzpigt.bean;
+
+public class Record {
+
+	private Integer id;
+	private String connect;
+	private String date;
+	
+	public Record() {
+		super();
+	}
+	public Record(Integer id, String connect, String date) {
+		super();
+		this.id = id;
+		this.connect = connect;
+		this.date = date;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getConnect() {
+		return connect;
+	}
+	public void setConnect(String connect) {
+		this.connect = connect;
+	}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
+	}
+	@Override
+	public String toString() {
+		return "Record [id=" + id + ", connect=" + connect + ", date=" + date + "]";
+	}
+	
+	
+	
+	
+}

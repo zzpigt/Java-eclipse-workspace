@@ -2,20 +2,31 @@ package cn.zzpigt.service.impl;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.swing.text.SimpleAttributeSet;
 
 import cn.zzpigt.bean.Record;
 import cn.zzpigt.bean.Users;
+import cn.zzpigt.dao.RecordDao;
 import cn.zzpigt.dao.UsersDao;
-import cn.zzpigt.dao.impl.UsersDaoImpl;
-import cn.zzpigt.service.RecordService;
 import cn.zzpigt.service.UserService;
 import cn.zzpigt.view.ConnectionFactory;
 
 public class UserServiceImpl implements UserService {
 
-	private static UsersDao ud = new UsersDaoImpl();
-	private static RecordService rs = new RecordServiceImpl();
+	private static UsersDao ud;
+	private static RecordDao rd;
 	private static Users u = null;
+
+	public static void setUd(UsersDao ud) {
+		UserServiceImpl.ud = ud;
+	}
+
+	public static void setRd(RecordDao rd) {
+		UserServiceImpl.rd = rd;
+	}
 
 	@Override
 	public void register(String name, String pwd) throws Exception {
@@ -58,7 +69,8 @@ public class UserServiceImpl implements UserService {
 			Record r = new Record();
 			r.setConnect(u.getName()+"登入系统 ");
 			r.setUid(u.getId());
-			rs.saveLog(r,conn);
+			r.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			rd.insert(r,conn);
 			
 			conn.commit();
 			return u;
@@ -86,7 +98,8 @@ public class UserServiceImpl implements UserService {
 			Record r = new Record();
 			r.setConnect(me.getName()+"存了"+money+"元");
 			r.setUid(me.getId());
-			rs.saveLog(r,conn);
+			r.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			rd.insert(r,conn);
 			
 			conn.commit();
 			
@@ -121,8 +134,8 @@ public class UserServiceImpl implements UserService {
 			Record r = new Record();
 			r.setConnect(me.getName()+"取了"+money+"元");
 			r.setUid(me.getId());
-			rs.saveLog(r,conn);
-			
+			r.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			rd.insert(r,conn);			
 			conn.commit();
 			
 		} catch (SQLException e) {
@@ -164,7 +177,8 @@ public class UserServiceImpl implements UserService {
 			Record r = new Record();
 			r.setConnect(me.getName()+"给"+name+"转账了"+money+"元");
 			r.setUid(me.getId());
-			rs.saveLog(r,conn);
+			r.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			rd.insert(r,conn);
 			
 			conn.commit();
 			

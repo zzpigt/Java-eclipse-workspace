@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import cn.zzpigt.bean.Record;
 import cn.zzpigt.bean.Users;
+import cn.zzpigt.context.ApplicationContext;
 import cn.zzpigt.service.RecordService;
 import cn.zzpigt.service.UserService;
 import cn.zzpigt.service.impl.RecordServiceImpl;
@@ -13,10 +14,15 @@ import cn.zzpigt.service.impl.UserServiceImpl;
 public class Demo {
 
 	static Scanner sc = new Scanner(System.in);
-	private static UserService us = new UserServiceImpl();
+	private static UserService us;
 	private static Users me;
 
 	public static void main(String[] args) {
+		//初始化
+		ApplicationContext.init();
+		//
+		us = (UserService) ApplicationContext.getBean("UserService");
+		
 		startMeun();
 
 		// 4. 存钱 , 取钱 , 转账功能

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+	<bean name="users1" class="cn.zzpigt.bean.Users">
+		<property name="id" value="1" />
+		<property name="name" value="张三" />
+	</bean>
+	
+	<bean name="users2" class="cn.zzpigt.bean.Users">
+		<property name="id" value="2" />
+		<property name="name" value="李四" />
+	</bean>
+	
+	<bean name="record1" class="cn.zzpigt.bean.Record">
+		<property name="id" value="1" />
+		<property name="connect" value="这是一条记录" />
+		<property name="date" value="2018.09.12" />
+		<property name="uid" value="10" />
+	</bean>
+	
+	<!-- 配置service -->
+	<bean name="UserService" class="cn.zzpigt.service.impl.UserServiceImpl">
+		<property name="ud" value="UsersDao" />
+		<property name="rd" value="RecordDao" />
+	</bean>
+	
+	<bean name="RecordService" class="cn.zzpigt.service.impl.RecordServiceImpl">
+		<property name="rd" value="RecordDao" />
+	</bean>
+	
+	<!-- 配置Dao -->
+	<bean name="UsersDao" class="cn.zzpigt.dao.impl.UsersDaoImpl"/>
+	<bean name="RecordDao" class="cn.zzpigt.dao.impl.RecordDaoImpl"/>
+	
+</beans>

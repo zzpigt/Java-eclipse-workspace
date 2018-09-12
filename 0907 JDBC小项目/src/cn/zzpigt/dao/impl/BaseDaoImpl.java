@@ -70,6 +70,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			// 拿到get方法的方法名
 			String getterName = "get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
 
+			
 			try {
 				Method getter = ct.getDeclaredMethod(getterName);
 				Object value = getter.invoke(t);
@@ -159,8 +160,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 
 		}
-
-		
 		
 		ps.executeUpdate();
 

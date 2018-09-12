@@ -6,21 +6,17 @@ import java.util.List;
 import cn.zzpigt.bean.Record;
 import cn.zzpigt.bean.Users;
 import cn.zzpigt.dao.RecordDao;
-import cn.zzpigt.dao.impl.RecordDaoImpl;
 import cn.zzpigt.service.RecordService;
 
 public class RecordServiceImpl implements RecordService{
 	
-	private static RecordDao rd = new RecordDaoImpl();
+	private static RecordDao rd;
+	
 
-	@Override
-	public void saveLog(Record r, Connection conn) throws Exception {
-		try {
-			rd.insert(r, conn);
-		} catch (Exception e) {
-			throw e;
-		}
+	public static void setRd(RecordDao rd) {
+		RecordServiceImpl.rd = rd;
 	}
+
 
 	@Override
 	public List<Record> getMyLog(Users me, Connection conn) throws Exception {

@@ -9,7 +9,7 @@ import java.util.List;
 
 import cn.zzpigt.bean.Dept;
 import cn.zzpigt.dao.DeptDao;
-import cn.zzpigt.demo.ConnectionFactory;
+import cn.zzpigt.datasource.ConnectionFactory;
 
 public class DeptDaoImpl implements DeptDao{
 
@@ -102,9 +102,8 @@ public class DeptDaoImpl implements DeptDao{
 	}
 
 	@Override
-	public List<Dept> queryAll() {
+	public List<Dept> queryAll(Connection conn) {
 		List<Dept> list  = new ArrayList<>();
-		Connection conn = ConnectionFactory.getConnection();
 		String sql = "select * from dept";
 		Statement stat = null;
 		ResultSet rs = null;

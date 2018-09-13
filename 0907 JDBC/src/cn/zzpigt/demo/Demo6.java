@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import cn.zzpigt.datasource.ConnectionFactory;
+
 public class Demo6 {
 	public static void main(String[] args) {
 
@@ -38,9 +40,7 @@ public class Demo6 {
 	public static void updateDept(int id, Connection conn) throws SQLException {
 		Statement stat = null;
 		String sql = "update dept set loc = '±±¾©' where deptno = " + id;
-		if(id == 60) {
-			throw new SQLException();
-		}
+		
 		stat = conn.createStatement();
 		int eu = stat.executeUpdate(sql);
 		System.out.println(eu);

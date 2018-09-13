@@ -1,5 +1,6 @@
 package cn.zzpigt.dao;
 
+import java.sql.Connection;
 import java.util.List;
 
 import cn.zzpigt.bean.Dept;
@@ -16,7 +17,7 @@ public interface DeptDao {
 	void updata(Dept d);
 	
 	//²é 
-	List<Dept> queryAll();
+	List<Dept> queryAll(Connection conn);
 	
 	//²é 
 	Dept queryById(int id);

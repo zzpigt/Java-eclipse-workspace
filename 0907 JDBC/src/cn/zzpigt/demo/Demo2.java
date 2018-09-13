@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import cn.zzpigt.datasource.ConnectionFactory;
+
 public class Demo2 {
 	public static void main(String[] args) {
 		Connection conn = null;

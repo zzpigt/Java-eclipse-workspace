@@ -1,13 +1,17 @@
 package cn.zzpigt.view;
 
+import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Properties;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
 public class ConnectionFactory {
+	
+	private static ComboPooledDataSource cds = new ComboPooledDataSource();
+
 
 	private static String driver;
 	private static String url;
@@ -28,21 +32,27 @@ public class ConnectionFactory {
 		uname = properties.getProperty("uname");
 		upwd = properties.getProperty("upwd");
 		
+		try {
+			//loads the jdbc driver            
+			cds.setDriverClass(driver);
+			cds.setJdbcUrl(url);
+			cds.setUser(uname);                                  
+			cds.setPassword(upwd);
+		} catch (PropertyVetoException e) {
+			e.printStackTrace();
+		} 
+		
 		
 	}
 	
 	
 	public static Connection getConnection() {
-		Connection conn = null;
 		try {
-			Class.forName(driver);
-			conn = DriverManager.getConnection(url, uname, upwd);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
+			return cds.getConnection();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return conn;
+		return null;
 		
 	}
 }

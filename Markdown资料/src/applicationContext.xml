@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+	<bean name="user" class="com.bwf.bean.User" >
+		<property name="id" value="1"/>
+		<property name="uname" value="张三"/>
+		<property name="upwd" value="abc"/>
+		<property name="money" value="500.2"/>
+	</bean>
+	
+	<bean name="user2" class="com.bwf.bean.User" >
+		<property name="id" value="2"/>
+		<property name="uname" value="李四"/>
+		<property name="upwd" value="cba"/>
+		<property name="money" value="250.2"/>
+	</bean>
+	
+	<bean name="record" class="com.bwf.bean.Record">
+		<property name="id" value="10"/>
+		<property name="content" value="这是一条测试记录"/>
+		<property name="time" value="2018-9-12 14:03:21"/>
+		<property name="uid" value="1"/>
+	</bean>
+	
+	<!-- 配置业务逻辑类 -->
+	<bean name="UserService" class="com.bwf.service.impl.UserServiceImpl">
+			<property name="ud" value="UserDao"/>
+			<property name="rd" value="RecordDao"/>
+	</bean>
+	
+	<!-- 配置Dao -->
+	<bean name="UserDao" class="com.bwf.dao.impl.UserDaoImpl" />
+	<bean name="RecordDao" class="com.bwf.dao.impl.RecordDaoImpl" />
+	
+
+</beans>

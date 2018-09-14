@@ -1,0 +1,27 @@
+
+【动态代理】
+
+ 1. 2个重要的API
+ 	Proxy
+ 	InvocationHandler
+ 
+ 2. 每一个动态代理类都必须实现InvocationHandler接口,
+  当我们调动代理对象的方法时, 
+  会自动转化成对 InvocationHandler 接口中的 Object invoke(Object proxy, Method method, Object[] args)
+  方法的调用
+
+
+【方法增强的方式】
+ 
+ 1. 继承
+	耦合性太高
+	灵活性很差
+
+ 2. 装饰模式
+	必须要实现所有方法
+
+ 3. 动态代理
+	必须要有接口
+
+  
+ 

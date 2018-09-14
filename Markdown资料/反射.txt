@@ -1,0 +1,61 @@
+
+【反射 reflect】
+ 程序在运行时可以动态的获取任何类的信息, 构造任何类的对象, 调用任何方法以及属性
+
+
+【类的类型】
+
+ 1,2,3,4,5 		- int 类型
+ "a", "3", "3.14" 	- String 类型
+ int , String , Dog , Student - Class类型(类的类型)
+
+ 类的共同点:
+  构造器
+  成员属性
+  成员方法
+
+【类对象】
+
+ 1. 通过类的对象调用 getClass()方法获取
+  前提: 你要有个类的对象
+
+ 2. 通过类名.class获取
+  前提: 你得能访问到这个类
+
+ 3. 通过 class.forName("完整类名");
+  前提: 你要直到类的全名
+
+【常用API】
+
+ 1. Class 类
+	newInstance()	用公开的无参构造构造对象
+	getName()	获取完整类名
+	getSimpleName()	简单类名
+	getConstructors()	获取所有公开构造器
+	getDeclaredConstructor()	获取指定参数构造器
+	getDeclaredConstructors()	获取所有构造器
+	getDeclaredField	获取自己定义的属性
+	getField		获取公开属性(包括继承得到的)
+
+ 2. Constructor 构造器
+	getModifiers()	获取访问修饰符
+	getName()	获取名字
+	getParameterTypes()	获取参数列表
+	newInstance()		构造对象
+	setAccessible(true)	设置访问权限
+
+ 3. Field 字段 属性
+	getModifiers()	获取访问修饰符
+	getName()	获取名字
+	set(Object obj, Object value)	给属性赋值
+	Object get(Object obj)		取出属性的值
+	setAccessible(true) 设置访问权限
+
+ 4. Method 方法
+	getModifiers()	获取访问修饰符
+	getName()	获取名字
+	setAccessible(true) 设置访问权限
+	Object invoke(Object obj, Object... args); 调用方法
+
+
+ 

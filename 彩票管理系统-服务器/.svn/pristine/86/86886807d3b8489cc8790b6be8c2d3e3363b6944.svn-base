@@ -1,0 +1,8 @@
+package com.bwf.dao.impl;
+
+import com.bwf.bean.User_lottory;
+import com.bwf.dao.User_lotteryDao;
+
+public class User_lotteryDaoImpl extends BaseDaoImpl<User_lottory> implements User_lotteryDao{
+
+}

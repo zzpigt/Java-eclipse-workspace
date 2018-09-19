@@ -1,0 +1,126 @@
+package com.bwf.client;
+
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
+import com.bwf.jar.MyRequest;
+import com.bwf.jar.MyResponse;
+
+public class SecondMenu {
+
+	private ObjectOutputStream oos;
+
+	public SecondMenu(ObjectOutputStream oos) {
+		super();
+		this.oos = oos;
+	}
+
+	public void operateMenu(String level, String uName, MyResponse lastResponse) {
+		// 后面再写（switch 3个身份的界面）
+		System.out.println(level + "登入成功后的界面！！这个地方就需要判断是哪个身份登入了");
+		switch (level) {
+		case "彩民":
+			try {
+				buyerMenu(uName, lastResponse);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+		case "管理员":
+//					amdinMenu(lastResponse);
+			break;
+		case "公证员":
+//					greffierMenu(lastResponse);
+			break;
+
+		default:
+			System.out.println("sb");
+			break;
+		}
+
+	}
+
+	private void buyerMenu(String uName, MyResponse lastResponse) throws IOException {
+		boolean isOver = false;
+		do {
+			// 显示彩民信息
+			System.out.println("彩民信息：");
+			System.out.print("姓名: " + uName);
+			System.out.print("\tID: " + lastResponse.getrMeg().get(MyResponse.MEG_ID));
+			System.out.println("\t余额: " + lastResponse.getrMeg().get(MyResponse.MEG_MONEY));
+
+			// 按钮功能--
+			System.out.println("请选择功能：1-修改密码，2-账户充值，3-下注，4-退出登入，5-查看记录，6-注销");
+			int chose = ClientDemo.sc.nextInt();
+			switch (chose) {
+			case 1:
+				changePwd(uName);
+				break;
+			case 2:
+				recharge(uName);
+				break;
+			case 3:
+
+				break;
+			case 4:
+
+				break;
+			case 5:
+
+				break;
+			case 6:
+
+				break;
+
+			default:
+				break;
+			}
+
+		} while (!isOver);
+
+	}
+
+	/**
+	 * 修改密码
+	 * 
+	 * @param uName
+	 * @throws IOException
+	 */
+	private void recharge(String uName) throws IOException {
+		//允许输入的次数
+		int count = 3;
+		
+		while (count < 0) {
+			// 第一步，先让用户输入旧密码进行验证,然后输入修改后的密码
+			System.out.println("用户输入旧密码进行验证,然后输入修改后的密码:");
+			String oldPwd = ClientDemo.sc.next();
+			String newPwd = ClientDemo.sc.next();
+			String secondNewPwd = ClientDemo.sc.next();
+
+			//判断
+			if(!newPwd.equals(secondNewPwd)) {
+				continue;
+			}
+			
+			MyRequest request = new MyRequest(MyRequest.TYPE_CHANGEPWD);
+			request.getUmap().put(MyRequest.MEG_USERNAME, uName);
+			request.getUmap().put(MyRequest.MEG_USERPWD, oldPwd);
+			request.getUmap().put(MyRequest.MEG_LEVEL, "彩民");
+
+			// 包装好了，就发送过去，序列化
+			oos.writeObject(request);
+			oos.flush();
+		}
+	}
+
+	/**
+	 * 账户重置
+	 * 
+	 * @param uName
+	 */
+	private void changePwd(String uName) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

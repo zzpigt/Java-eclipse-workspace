@@ -1,0 +1,7 @@
+package com.bwf.dao;
+
+import com.bwf.bean.Lottery_info;
+
+public interface Lottery_infoDao extends BaseDao<Lottery_info>{
+
+}

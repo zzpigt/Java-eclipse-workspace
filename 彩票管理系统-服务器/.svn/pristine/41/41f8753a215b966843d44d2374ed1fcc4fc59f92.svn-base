@@ -1,0 +1,4 @@
+driver=com.mysql.jdbc.Driver
+url=jdbc:mysql://172.31.69.32:3306/jdbc1
+uname=root
+upwd=root

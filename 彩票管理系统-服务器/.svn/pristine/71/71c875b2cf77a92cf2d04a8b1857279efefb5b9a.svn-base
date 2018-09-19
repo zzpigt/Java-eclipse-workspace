@@ -1,0 +1,114 @@
+package com.bwf.service.impl;
+
+import java.io.ObjectOutputStream;
+import java.sql.Connection;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+
+import com.bwf.bean.User;
+import com.bwf.dao.UserDao;
+import com.bwf.dao.impl.UserDaoImpl;
+import com.bwf.database.ConnectionFactory;
+import com.bwf.jar.MyRequest;
+import com.bwf.jar.MyResponse;
+import com.bwf.server.ServerThread;
+import com.bwf.service.UserService;
+
+public class UserServiceImpl implements UserService {
+
+	private UserDao ud = new UserDaoImpl();
+	private User u = null;
+
+	@Override
+	public MyResponse doRegist(MyRequest request, ObjectOutputStream oos) throws Exception {
+		String uName = request.getUmap().get(MyRequest.MEG_USERNAME);
+		String uPwd = request.getUmap().get(MyRequest.MEG_USERPWD);
+
+		// 判断是有用户名已经存在【数据库】
+		Connection conn = null;
+		try {
+			conn = ConnectionFactory.getConnection();
+
+			if (ud.getByName(uName, conn) != null) {
+				// 用户名已经存在,包装一个返回信息的类
+				MyResponse response = new MyResponse(MyResponse.TYPE_REGISE);
+				response.setSuccess(false);
+				response.getrMeg().put(MyResponse.MEG_CONTENT, "用户名已经存在，请重新输入！！");
+
+				oos.writeObject(response);
+				oos.flush();
+				throw new Exception("用户名已经存在！！");
+			}
+			// 可以注册
+			u = new User();
+			u.setName(uName);
+			u.setPwd(uPwd);
+			u.setLevel(1);
+			ud.insert(u, conn);
+			// 用户插入数据库后，返回给客户端信息
+			MyResponse response = new MyResponse(MyResponse.TYPE_REGISE);
+			response.setSuccess(true);
+			response.getrMeg().put(MyResponse.MEG_CONTENT, "注册成功");
+
+			oos.writeObject(response);
+			oos.flush();
+
+			return response;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+
+	}
+
+	@Override
+	public MyResponse doLogin(MyRequest request, ObjectOutputStream oos) throws Exception {
+		String uName = request.getUmap().get(MyRequest.MEG_USERNAME);
+		String uPwd = request.getUmap().get(MyRequest.MEG_USERPWD);
+
+		// 判断输入的用户名和密码是否正确
+		Connection conn = null;
+		try {
+			conn = ConnectionFactory.getConnection();
+			MyResponse response = null;
+			if (ud.getByNameAndPwd(uName, uPwd, conn) != null) {
+				//判断用户是否已经登入过了
+				Set<String> keySet = ServerThread.onLineMap.keySet();
+				for (String s_name : keySet) {
+					if (s_name.equals(uName)) {
+						System.out.println("用户已经登入，不要重复上线！！");
+						response = new MyResponse(MyResponse.TYPE_LOGIN);
+						response.setSuccess(false);
+						response.getrMeg().put(MyResponse.MEG_CONTENT, "用户已经登入，不要重复上线！！");
+
+						oos.writeObject(response);
+						oos.flush();
+						return response;
+
+					}
+				}
+				// 登入成功
+				ServerThread.onLineMap.put(uName, oos);
+				response = new MyResponse(MyResponse.TYPE_LOGIN);
+				response.setSuccess(true);
+				response.getrMeg().put(MyResponse.MEG_CONTENT, "登入成功！！");
+
+				oos.writeObject(response);
+				oos.flush();
+			} else {
+				// 登入失败
+				response = new MyResponse(MyResponse.TYPE_LOGIN);
+				response.setSuccess(true);
+				response.getrMeg().put(MyResponse.MEG_CONTENT, "注册成功");
+
+				oos.writeObject(response);
+				oos.flush();
+			}
+			return response;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+}

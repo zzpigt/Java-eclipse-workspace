@@ -1,0 +1,60 @@
+package com.bwf.bean;
+
+public class User {
+
+	private Integer id;
+	
+	private String name;
+	
+	private String pwd;
+	
+	private Integer level;
+
+	public User(String name, String pwd) {
+		super();
+		this.name = name;
+		this.pwd = pwd;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+
+	public Integer getLevel() {
+		return level;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+	public User() {
+		
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", pwd=" + pwd + ", level=" + level + "]";
+	}
+	
+	
+}

@@ -1,0 +1,52 @@
+package com.bwf.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.bwf.bean.User_lottery;
+import com.bwf.dao.User_lotteryDao;
+
+public class User_lotteryDaoImpl extends BaseDaoImpl<User_lottery> implements User_lotteryDao {
+
+	@Override
+	public List<String> getByUid(int id, Connection conn) throws Exception {
+		List<String> list =new ArrayList<>();
+		String sql="select * from user_lottery where uid=?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setInt(1,id );
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			User_lottery ul=new User_lottery();
+			ul.setId(rs.getInt("id"));
+			ul.setLtime(rs.getString("ltime"));
+			ul.setSelectednum(rs.getString("selectednum"));
+			ul.setUid(rs.getInt("uid"));
+			ul.setBuycount(rs.getInt("buycount"));
+			ul.setWinmoney(rs.getDouble("winmoney"));
+			ul.setBuytime(rs.getString("buytime"));
+			list.add(ul.toString());
+		}
+
+		return list;
+	}
+
+	@Override
+	public int getBySelectnumAndUid(String selectNum, int uid, Connection conn) throws Exception {
+		String sql = "select sum(buycount) from user_lottery where uid=? and selectednum=?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setObject(1, uid);
+		ps.setObject(2, selectNum);
+		ResultSet rs = ps.executeQuery();
+		if (rs.next()) {
+			return rs.getInt(1);
+		} else {
+			return 0;
+		}
+	}
+
+
+
+}

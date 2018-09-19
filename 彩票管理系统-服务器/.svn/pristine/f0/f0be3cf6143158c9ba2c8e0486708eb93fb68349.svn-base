@@ -1,0 +1,16 @@
+package com.bwf.dao.impl;
+
+import java.sql.Connection;
+
+import com.bwf.bean.Lottery_info;
+import com.bwf.dao.Lottery_infoDao;
+
+public class Lottery_infoDaoImpl extends BaseDaoImpl<Lottery_info> implements Lottery_infoDao{
+
+	@Override
+	public Lottery_info getLastMeg(Connection conn) throws Exception {
+		
+		return null;
+	}
+
+}

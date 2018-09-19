@@ -1,0 +1,59 @@
+package com.bwf.bean;
+
+import java.io.Serializable;
+
+public class User_lottery implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8439430207815362256L;
+	private Integer time;
+	private String ltime;
+	private String selectnum;
+	private Integer uid;
+	private Integer buycount;
+	private Double winmoney;
+	public Integer getTime() {
+		return time;
+	}
+	public void setTime(Integer time) {
+		this.time = time;
+	}
+	public String getLtime() {
+		return ltime;
+	}
+	public void setLtime(String ltime) {
+		this.ltime = ltime;
+	}
+	public String getSelectnum() {
+		return selectnum;
+	}
+	public void setSelectnum(String selectnum) {
+		this.selectnum = selectnum;
+	}
+	public Integer getUid() {
+		return uid;
+	}
+	public void setUid(Integer uid) {
+		this.uid = uid;
+	}
+	public Integer getBuycount() {
+		return buycount;
+	}
+	public void setBuycount(Integer buycount) {
+		this.buycount = buycount;
+	}
+	public Double getWinmoney() {
+		return winmoney;
+	}
+	public void setWinmoney(Double winmoney) {
+		this.winmoney = winmoney;
+	}
+	@Override
+	public String toString() {
+		return "User_lottory [time=" + time + ", ltime=" + ltime + ", selectnum=" + selectnum + ", uid=" + uid
+				+ ", buycount=" + buycount + ", winmoney=" + winmoney + "]";
+	}
+	
+}

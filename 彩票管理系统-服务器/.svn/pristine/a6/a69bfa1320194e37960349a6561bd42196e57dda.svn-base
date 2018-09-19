@@ -1,0 +1,10 @@
+package com.bwf.dao.impl;
+
+import com.bwf.bean.User;
+import com.bwf.dao.UserDao;
+
+public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
+
+	
+
+}

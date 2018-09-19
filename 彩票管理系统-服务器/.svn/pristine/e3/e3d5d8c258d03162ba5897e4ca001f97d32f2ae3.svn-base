@@ -1,0 +1,48 @@
+package com.bwf.server;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Properties;
+public class ServerDemo {
+	
+	private static int port;
+	
+	static{
+		
+		Properties pp=new Properties();
+		
+		InputStream is = ServerDemo.class.getClassLoader().getResourceAsStream("socketconfig.properties");
+		
+		try {
+			pp.load(is);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		port =Integer.parseInt(pp.getProperty("port"));
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		
+		try {
+			//开一个服务器
+			ServerSocket ss = new ServerSocket(port);
+			while(true) {
+				Socket socket = ss.accept();
+				
+				System.out.println("有一个客户端接入！");
+				//开一个读线程
+				new ServerThread(socket).start();
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+}

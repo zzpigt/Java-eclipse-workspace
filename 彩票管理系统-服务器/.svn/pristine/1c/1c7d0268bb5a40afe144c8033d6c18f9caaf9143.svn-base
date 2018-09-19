@@ -1,0 +1,16 @@
+package com.bwf.dao.impl;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import com.bwf.bean.User_lottery;
+import com.bwf.dao.User_lotteryDao;
+
+public class User_lotteryDaoImpl extends BaseDaoImpl<User_lottery> implements User_lotteryDao{
+
+	@Override
+	public User_lottery getByNameAndPwd(String uName, String uPwd, Connection conn) throws SQLException {
+		return null;
+	}
+
+}

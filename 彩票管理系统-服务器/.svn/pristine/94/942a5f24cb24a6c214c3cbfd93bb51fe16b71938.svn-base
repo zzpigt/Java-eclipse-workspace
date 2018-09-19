@@ -1,0 +1,53 @@
+package com.bwf.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.bwf.bean.User;
+import com.bwf.dao.UserDao;
+
+public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
+
+	@Override
+	public User getByName(String uName, Connection conn) throws SQLException {
+		String sql = "select * from user where name = ?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setString(1, uName);
+		ResultSet rs = ps.executeQuery();
+		User u = null;
+		if(rs.next()) {
+			u = new User();
+			u.setId(rs.getInt("id"));
+			u.setName(rs.getString("name"));
+			u.setPwd(rs.getString("pwd"));
+			u.setMoney(rs.getDouble("money"));
+			u.setState(rs.getInt("state"));
+		}
+		return u;
+	}
+
+	@Override
+	public User getByNameAndPwd(String uName, String uPwd, Connection conn) throws SQLException {
+		String sql = "select * from user where name = ? and pwd = ?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setString(1, uName);
+		ps.setString(2, uPwd);
+		
+		ResultSet rs = ps.executeQuery();
+		User u = null;
+		if(rs.next()) {
+			u = new User();
+			u.setId(rs.getInt("id"));
+			u.setName(rs.getString("name"));
+			u.setPwd(rs.getString("pwd"));
+			u.setMoney(rs.getDouble("money"));
+			u.setState(rs.getInt("state"));
+		}
+		return u;
+	}
+
+	
+
+}

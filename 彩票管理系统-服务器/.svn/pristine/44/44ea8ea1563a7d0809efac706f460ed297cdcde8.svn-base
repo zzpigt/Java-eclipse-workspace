@@ -1,0 +1,16 @@
+package com.bwf.dao.impl;
+
+import java.util.List;
+
+import com.bwf.bean.User_lottery;
+import com.bwf.dao.User_lotteryDao;
+
+public class User_lotteryDaoImpl extends BaseDaoImpl<User_lottery> implements User_lotteryDao{
+
+	@Override
+	public List<String> getByUid(String uName) throws Exception {
+		return null;
+	}
+
+	
+}

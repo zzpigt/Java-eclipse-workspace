@@ -1,0 +1,7 @@
+package com.bwf.dao;
+
+import com.bwf.bean.User_lottory;
+
+public interface User_lotteryDao extends BaseDao<User_lottory>{
+
+}

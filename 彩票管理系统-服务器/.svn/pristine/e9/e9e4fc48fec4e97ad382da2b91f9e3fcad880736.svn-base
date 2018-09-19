@@ -1,0 +1,27 @@
+package com.bwf.server;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+public class ServerDemo {
+	
+	public static void main(String[] args) {
+		
+		try {
+			//开一个服务器
+			ServerSocket ss = new ServerSocket(8080);
+			while(true) {
+				Socket socket = ss.accept();
+				
+				System.out.println("有一个客户端接入！");
+				//开一个读线程
+				new ServerThread(socket).start();
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+}

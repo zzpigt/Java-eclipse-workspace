@@ -1,0 +1,53 @@
+package com.bwf.bean;
+
+import java.io.Serializable;
+
+public class Lottery_info implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2008113382523502740L;
+	private String  time;
+	private Double money;
+	private Integer state;
+	private Integer winnum;
+	private Double poolmoney;
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
+	public Double getMoney() {
+		return money;
+	}
+	public void setMoney(Double money) {
+		this.money = money;
+	}
+	public Integer getState() {
+		return state;
+	}
+	public void setState(Integer state) {
+		this.state = state;
+	}
+	public Integer getWinnum() {
+		return winnum;
+	}
+	public void setWinnum(Integer winnum) {
+		this.winnum = winnum;
+	}
+	public Double getPoolmoney() {
+		return poolmoney;
+	}
+	public void setPoolmoney(Double poolmoney) {
+		this.poolmoney = poolmoney;
+	}
+	@Override
+	public String toString() {
+		return "lottery_info [time=" + time + ", money=" + money + ", state=" + state + ", winnum=" + winnum
+				+ ", poolmoney=" + poolmoney + "]";
+	}
+	
+	
+}

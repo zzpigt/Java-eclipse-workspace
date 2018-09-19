@@ -1,0 +1,53 @@
+package com.bwf.jar;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+public class MyRequest implements Serializable{
+	/**
+	 * 序列化
+	 */
+	private static final long serialVersionUID = -1837937764657754236L;
+	
+	private int type;
+	private Map<String,String> umap = new HashMap<>();
+	
+	//常量
+	public static final int TYPE_REGIST = 1;
+	public static final int TYPE_LOGIN = 2;
+	public static final int TYPE_LOGOUT = 3;
+	public static final int TYPE_CHANGEPWD = 4;
+	public static final int TYPE_RECHARGE = 5;
+	public static final int TYPE_BET = 6;
+	public static final String MEG_USERNAME = "uName";
+	public static final String MEG_USERPWD = "uPwd";
+	public static final String MEG_LEVEL = "level";	//登入者的身份
+	public static final String MEG_NEWPWD = "newPwd";//修改密码的时候需要设置
+	public static final String MEG_ADDMONEY = "addMoney";//修改余额
+	
+	public static final String MEG = "meg";
+	
+	public MyRequest(int type) {
+		super();
+		this.type = type;
+	}
+	
+	
+
+	public int getType() {
+		return type;
+	}
+	public Map<String, String> getUmap() {
+		return umap;
+	}
+
+	@Override
+	public String toString() {
+		return "MyRequest [type=" + type + ", umap=" + umap + "]";
+	}
+	
+	
+	
+
+}

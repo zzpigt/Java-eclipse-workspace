@@ -1,0 +1,78 @@
+package com.bwf.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.bwf.bean.User_lottery;
+import com.bwf.dao.User_lotteryDao;
+
+public class User_lotteryDaoImpl extends BaseDaoImpl<User_lottery> implements User_lotteryDao {
+
+	@Override
+	public List<String> getByUid(int id, Connection conn) throws SQLException {
+		List<String> list =new ArrayList<>();
+		String sql="select * from user_lottery where uid=?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setInt(1,id );
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			//list.add(rs.getString("selectednum")+"%"+rs.getInt("buycount"));
+			
+			String str=rs.getInt("id")+"\t"+rs.getString("ltime")+"\t"+
+					rs.getString("selectednum")+"\t"+rs.getInt("uid")+
+					"\t"+rs.getInt("buycount")+"\t"+rs.getDouble("winmoney")+
+					"\t"+rs.getString("buytime");
+			
+			list.add(str);
+		
+		}
+
+		return list;
+	}
+
+	@Override
+	public int getBySelectnumAndUid(String selectNum, int uid, String ltime,  Connection conn) throws SQLException {
+		String sql = "select sum(buycount) from user_lottery where uid=? and selectednum=? and ltime=?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setObject(1, uid);
+		ps.setObject(2, selectNum);
+		ps.setObject(3,ltime);
+		ResultSet rs = ps.executeQuery();
+		if (rs.next()) {
+			System.out.println(rs.getInt(1));
+			return rs.getInt(1);
+			
+		} else {
+			return 0;
+		}
+	}
+
+	@Override
+	public List<String> getByUidAndTime(int id, String time, Connection conn) throws SQLException {
+		List<String> list =new ArrayList<>();
+		String sql="select * from user_lottery where uid=? and ltime=?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setInt(1,id );
+		ps.setString(2,time);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			list.add(rs.getString("selectednum")+"\t×¢Êý:"+rs.getInt("buycount"));
+		}
+
+		return list;
+	}
+
+	@Override
+	public void updataWinmoneyByTimeAndWinnum(String winNum, Double poolmoney, String time, Connection conn)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+}

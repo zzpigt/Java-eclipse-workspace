@@ -1,0 +1,80 @@
+package com.bwf.client;
+
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.List;
+
+import com.bwf.jar.MyRequest;
+import com.bwf.jar.MyResponse;
+
+public class GreffierMenu {
+	
+	ObjectOutputStream oos;
+	MyResponse lastResponse;
+
+	public GreffierMenu(ObjectOutputStream oos, MyResponse lastResponse) {
+		this.oos = oos;
+		this.lastResponse = lastResponse;
+	}
+
+	public void greffierMenu(String uName) throws IOException {
+		boolean isOver = false;
+		do {
+			System.out.println(uName+"公证员，欢迎您的登入！！");
+			System.out.println("1-开奖，2-查看彩票信息");
+			String chose = ClientDemo.sc.next();
+			switch (chose) {
+			case "开奖":	
+				drawLottery(uName);
+				break;
+			case "查看彩票信息":	
+				showLotteryMeg(uName);
+				break;
+				
+			default:
+				break;
+			}
+			
+		}while(!isOver);
+	}
+
+	private void drawLottery(String uName) {
+		
+		
+	}
+
+	private void showLotteryMeg(String uName) throws IOException {
+		System.out.println("查看所有彩票的信息：");
+		MyRequest request = new MyRequest(MyRequest.TYPE_GREFFIER_SHOWLOTTERYMEG);
+		request.getUmap().put(MyRequest.MEG_USERNAME, uName);
+		request.getUmap().put(MyRequest.MEG_LEVEL, "公证员");
+		// 包装好了，就发送过去，序列化
+		oos.writeObject(request);
+		oos.flush();
+		
+		synchronized (ClientDemo.class) {
+			if (ClientDemo.lastResponse == null) {
+				try {
+					ClientDemo.class.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+
+			// 读到了消息
+			MyResponse lastResponse = ClientDemo.lastResponse;
+			ClientDemo.lastResponse = null;
+			System.out.println(lastResponse.getrMeg().get(MyResponse.MEG_CONTENT));
+			// 拿到所有的彩票信息
+			List<String> lotteryMeg = lastResponse.getHistoryList();
+			
+			for (String  p: lotteryMeg) {
+				System.out.println(p);
+			}
+
+			ClientDemo.class.notify();
+		}
+		
+	}
+
+}

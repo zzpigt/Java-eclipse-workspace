@@ -1,0 +1,70 @@
+package com.bwf.service.impl;
+
+import java.io.ObjectOutputStream;
+import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.bwf.bean.Lottery_info;
+import com.bwf.dao.Lottery_infoDao;
+import com.bwf.database.ConnectionFactory;
+import com.bwf.jar.MyRequest;
+import com.bwf.jar.MyResponse;
+import com.bwf.service.AdminService;
+
+public class AdminServiceImpl implements AdminService {
+
+	private Lottery_infoDao ld;
+
+	public void setLd(Lottery_infoDao ld) {
+		this.ld = ld;
+	}
+
+	@Override
+	public MyResponse doIssue(MyRequest request, ObjectOutputStream oos) throws Exception {
+		Connection conn = ConnectionFactory.getConnection();
+		// 查看是否有未开奖彩票
+		Lottery_info lastMeg = ld.getNotLastMeg(conn);
+		MyResponse response = new MyResponse(MyResponse.TYPE_ADMIN_ISSUE);
+		Double issuePrice = Double.parseDouble(request.getUmap().get(MyRequest.LOTTERY_NEWPRICE));
+		Lottery_info li = new Lottery_info();
+		li.setTime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+		li.setPrice(issuePrice);
+		li.setSellnum(0);
+		li.setState(0);
+		// 从上一次的奖池中取出余额放入新的一期
+		
+		li.setPoolmoney(lastMeg.getPoolmoney());
+		//设置上一期奖池金额为0
+		lastMeg.setPoolmoney(0.0);
+		ld.update(lastMeg, conn);
+		li.setWinnum("未开奖");
+		System.out.println(li.toString());
+		ld.insert(li, conn);
+		response.setSuccess(true);
+		response.getrMeg().put(MyResponse.MEG_CONTENT, "发布新一期彩票成功");
+		oos.writeObject(response);
+		oos.flush();
+		return response;
+	}
+
+	@Override
+	public MyResponse doFindBuyer(MyRequest request, ObjectOutputStream oos) throws Exception {
+
+		return null;
+	}
+
+
+	@Override
+	public MyResponse doSortBuyerById(MyRequest request, ObjectOutputStream oos) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MyResponse doSortBuyerByMoney(MyRequest request, ObjectOutputStream oos) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

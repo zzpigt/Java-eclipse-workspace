@@ -1,0 +1,17 @@
+package com.bwf.dao;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.bwf.bean.User_lottery;
+
+public interface User_lotteryDao extends BaseDao<User_lottery>{
+
+	List<String> getByUid(int id, Connection conn)throws SQLException;
+	List<String> getByUidAndTime(int id,String time, Connection conn)throws SQLException;
+	int getBySelectnumAndUid(String selectNum, int uid, String ltime, Connection conn)throws SQLException;
+	void updataWinmoneyByTimeAndWinnum(String winNum, Double poolmoney, String time, Connection conn)throws SQLException;
+
+
+}

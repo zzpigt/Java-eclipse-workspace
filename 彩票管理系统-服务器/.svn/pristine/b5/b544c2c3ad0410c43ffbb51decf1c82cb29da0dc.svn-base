@@ -1,0 +1,22 @@
+<?xml version ="1.0" encoding="UTF-8"?>
+<beans>
+	<bean name="UserService" class="com.bwf.service.impl.UserServiceImpl">
+		<property name="ud" value="UserDao" />
+		<property name="ad" value="AdminDao" />
+		<property name="ld" value="Lottery_infoDao" />
+		<property name="uld" value="User_lotteryDao" />
+
+	</bean>
+	<bean name="AdminService" class="com.bwf.service.impl.AdminServiceImpl">
+		<property name="ld" value="Lottery_infoDao" />
+	</bean>
+	<bean name="UserDao" class="com.bwf.dao.impl.UserDaoImpl" />
+	<bean name="AdminDao" class="com.bwf.dao.impl.AdminDaoImpl" />
+	<bean name="Lottery_infoDao" class="com.bwf.dao.impl.Lottery_infoDaoImpl" />
+	<bean name="User_lotteryDao" class="com.bwf.dao.impl.User_lotteryDaoImpl" />
+
+</beans>
+
+
+<!-- 1. 再配置一个user对象在xml文件中 在java代码中分别获取2个不同的user对象, 并打印输出 2. 在xml文件中配置一条记录对象, 
+	并赋值属性 在java代码中获取这个记录对象, 并打印输出(可能会出问题, 试着解决一下) -->

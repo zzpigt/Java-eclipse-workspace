@@ -1,0 +1,120 @@
+package com.bwf.test;
+
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+
+import com.bwf.database.ConnectionFactory;
+
+public class Test {
+
+	public static void main(String[] args) {
+		// 测试数据库连接
+//		test1();
+//		test2();
+		String winNum = "07-12-13-19-27-28:06";
+		double poolMoney = 2000000;
+		int money = test3(winNum, poolMoney, "07-12-13-19-27-28:06");
+		System.out.println(money);
+
+	}
+
+	public static int test3(String winNum, double poolMoney, String num) {
+		String[] w_redNum = winNum.substring(0, winNum.indexOf(":")).split("-");
+		String w_buleNum = winNum.substring(winNum.indexOf(":") + 1);
+
+		String onePrice = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_redNum[3] + w_redNum[4] + w_redNum[5] + w_buleNum;
+		String twoPrice = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_redNum[3] + w_redNum[4] + w_redNum[5];
+		String price3000 = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_redNum[3] + w_redNum[4] + w_buleNum;
+		String price500 = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_redNum[3] + w_redNum[4];
+		String price200 = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_redNum[3] + w_buleNum;
+		String price20 = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_redNum[3];
+		String price10 = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_buleNum;
+		String price5 = winNum.substring(winNum.indexOf(":") + 1);// 蓝球 5元
+
+		// 买的号码
+		String[] u_redNum = num.substring(0, num.indexOf(":")).split("-");
+		String u_buleNum = num.substring(num.indexOf(":") + 1);
+		int money = 0;
+
+		if (onePrice.equals(
+				u_redNum[0] + u_redNum[1] + u_redNum[2] + u_redNum[3] + u_redNum[4] + u_redNum[5] + u_buleNum)) {
+			money = (int) (poolMoney*0.1);
+			return money;
+		} else if (twoPrice.equals(u_redNum[0] + u_redNum[1] + u_redNum[2] + u_redNum[3] + u_redNum[4] + u_redNum[5])) {
+			money =  (int) (poolMoney*0.05);
+			return money;
+		} else if (price3000.equals(u_redNum[0] + u_redNum[1] + u_redNum[2] + u_redNum[3] + u_redNum[4] + u_buleNum)) {
+			money = 3000;
+			return money;
+		} else if (price500.equals(u_redNum[0] + u_redNum[1] + u_redNum[2] + u_redNum[3] + u_redNum[4])) {
+			money = 500;
+			return money;
+		} else if (price200.equals(u_redNum[0] + u_redNum[1] + u_redNum[2] + u_redNum[3] + u_buleNum)) {
+			money = 200;
+			return money;
+		} else if (price20.equals(u_redNum[0] + u_redNum[1] + u_redNum[2] + u_redNum[3])) {
+			money = 20;
+			return money;
+		} else if (price10.equals(u_redNum[0] + u_redNum[1] + u_redNum[2] + u_buleNum)) {
+			money = 10;
+			return money;
+		} else if (price5.equals(u_buleNum)) {
+			money = 5;
+			return money;
+		}
+
+		return money;
+
+	}
+
+	public static void test1() {
+		Connection conn = ConnectionFactory.getConnection();
+		System.out.println(conn);
+	}
+
+	public static void test2() {
+		StringBuilder sb = new StringBuilder();
+		List<Integer> numAll = new ArrayList<>();
+		boolean isHere = true;
+		boolean isDone = false;
+		do{
+			int num = new Random().nextInt(32) + 1;// 随机产生一个数【1-32】
+			for (int j : numAll) {
+				if (j == num) {
+					isHere = false;
+					break;
+				}
+			}
+			if (isHere) {
+				numAll.add(num);
+			}
+			if(numAll.size() > 5) {
+				isDone = true;
+			}
+		}while(!isDone);
+		Collections.sort(numAll);
+		for (int i = 0; i < numAll.size(); i++) {
+			if (numAll.get(i) < 10) {
+				sb.append("0").append(numAll.get(i));
+			} else {
+				sb.append(numAll.get(i));
+			}
+			if (i < numAll.size() - 1) {
+				sb.append("-");
+			}
+		}
+		int endNum = new Random().nextInt(16) + 1;
+		if (endNum < 10) {
+			sb.append(":0").append(endNum);
+		} else {
+			sb.append(":").append(endNum);
+		}
+		System.out.println(sb.toString());
+	}
+}

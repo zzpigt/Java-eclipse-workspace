@@ -1,0 +1,97 @@
+package com.bwf.client;
+
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.List;
+
+import com.bwf.jar.MyRequest;
+import com.bwf.jar.MyResponse;
+
+public class AdminMenu {
+	private ObjectOutputStream oos;
+	private MyResponse lastResponse;
+	
+	public AdminMenu(ObjectOutputStream oos,MyResponse lastResponse) {
+		this.oos = oos;
+		this.lastResponse = lastResponse;
+	}
+
+	public void amdinMenu(String uName) throws IOException{
+		boolean isOver = false;
+		do {
+			System.out.println(uName+"管理员，欢迎您的登入！！");
+			
+			System.out.println("选择功能：1-发布，2-查询彩民信息，3-排序（查询到所有彩民信息），");
+			int chose = ClientDemo.sc.nextInt();
+			switch (chose) {
+			case 1:
+				issue(uName);
+				continue;
+			case 2:
+				findBuyer(uName);
+				continue;
+			case 3:
+				sortBuyer(uName);
+				continue;
+
+			default:
+				break;
+			}
+			
+			
+		}while(!isOver);
+		
+	}
+
+	private void sortBuyer(String uName) throws IOException {
+		if(lastResponse.isIssue()) {
+			System.out.println("当期彩票尚未开奖，不能发行下一期！！");
+			return ;
+		}
+		
+		//可以发行
+		System.out.println("请输入新一期彩票的单价：");
+		String newPrice = ClientDemo.sc.next();
+		
+		MyRequest request = new MyRequest(MyRequest.TYPE_ADMIN_ISSUE);
+		request.getUmap().put(MyRequest.MEG_USERNAME, uName);
+		request.getUmap().put(MyRequest.MEG_LEVEL, "管理员");
+		request.getUmap().put(MyRequest.LOTTERY_NEWPRICE, newPrice);
+		// 包装好了，就发送过去，序列化
+		oos.writeObject(request);
+		oos.flush();
+		
+		synchronized (ClientDemo.class) {
+			if (ClientDemo.lastResponse == null) {
+				try {
+					ClientDemo.class.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+
+			// 读到了消息
+			MyResponse lastResponse = ClientDemo.lastResponse;
+			ClientDemo.lastResponse = null;
+			System.out.println(lastResponse.getrMeg().get(MyResponse.MEG_CONTENT));
+			//发行成功了
+			
+			ClientDemo.class.notify();
+		}
+		
+	}
+
+	private void findBuyer(String uName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void issue(String uName) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	
+	
+}

@@ -1,0 +1,178 @@
+package com.bwf.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.bwf.bean.User_lottery;
+import com.bwf.dao.User_lotteryDao;
+
+public class User_lotteryDaoImpl extends BaseDaoImpl<User_lottery> implements User_lotteryDao {
+
+	@Override
+	public List<String> getByUid(int id, Connection conn) throws SQLException {
+		List<String> list =new ArrayList<>();
+		String sql="select * from user_lottery where uid=?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setInt(1,id );
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			//list.add(rs.getString("selectednum")+"%"+rs.getInt("buycount"));
+			
+			String str=rs.getInt("id")+"\t"+rs.getString("ltime")+"\t"+
+					rs.getString("selectednum")+
+					"\t"+rs.getInt("buycount")+"\t"+rs.getDouble("winmoney")+
+					"\t"+rs.getString("buytime");
+			
+			list.add(str);
+		
+		}
+
+		return list;
+	}
+
+	@Override
+	public int getBySelectnumAndUid(String selectNum, int uid, String ltime,  Connection conn) throws SQLException {
+		String sql = "select sum(buycount) from user_lottery where uid=? and selectednum=? and ltime=?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setObject(1, uid);
+		ps.setObject(2, selectNum);
+		ps.setObject(3,ltime);
+		ResultSet rs = ps.executeQuery();
+		if (rs.next()) {
+			System.out.println(rs.getInt(1));
+			return rs.getInt(1);
+			
+		} else {
+			return 0;
+		}
+	}
+
+	@Override
+	public List<String> getByUidAndTime(int id, String time, Connection conn) throws SQLException {
+		List<String> list =new ArrayList<>();
+		String sql="select * from user_lottery where uid=? and ltime=?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setInt(1,id );
+		ps.setString(2,time);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			list.add(rs.getString("selectednum")+"\t注数:"+rs.getInt("buycount"));
+		}
+
+		return list;
+	}
+
+	@Override
+	public void updataWinmoneyByTimeAndWinnum(List<User_lottery> uList, String winNum, Double poolmoney, String time,
+			Connection conn) throws SQLException {
+		//开奖后更新所有彩民的winmoney
+		for (User_lottery ul : uList) {
+			double winMoney = getWinMoney(poolmoney,winNum,ul.getSelectednum());
+			String sql = "update user_lottery set winmoney = ? where id = ? and ltime = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setDouble(1, winMoney*ul.getBuycount());
+			ps.setInt(2, ul.getId());
+			ps.setString(3, time);
+			ps.executeUpdate();
+		}
+		
+	}
+
+	/**
+	 * 计算购买的彩票赢的钱
+	 * @param selectednum
+	 * @param poolmoney
+	 * @param winNum
+	 * @return
+	 */
+	private double getWinMoney(Double poolmoney, String winNum, String num) {
+		String[] w_redNum = winNum.substring(0, winNum.indexOf(":")).split("-");
+		String w_buleNum = winNum.substring(winNum.indexOf(":") + 1);
+
+		String onePrice = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_redNum[3] + w_redNum[4] + w_redNum[5] + w_buleNum;
+		String twoPrice = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_redNum[3] + w_redNum[4] + w_redNum[5];
+		String price3000 = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_redNum[3] + w_redNum[4] + w_buleNum;
+		String price500 = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_redNum[3] + w_redNum[4];
+		String price200 = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_redNum[3] + w_buleNum;
+		String price20 = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_redNum[3];
+		String price10 = w_redNum[0] + w_redNum[1] + w_redNum[2] + w_buleNum;
+		String price5 = winNum.substring(winNum.indexOf(":") + 1);// 蓝球 5元
+
+		// 买的号码
+		String[] u_redNum = num.substring(0, num.indexOf(":")).split("-");
+		String u_buleNum = num.substring(num.indexOf(":") + 1);
+		int money = 0;
+
+		if (onePrice.equals(
+				u_redNum[0] + u_redNum[1] + u_redNum[2] + u_redNum[3] + u_redNum[4] + u_redNum[5] + u_buleNum)) {
+			money = (int) (poolmoney*0.1);
+			return money;
+		} else if (twoPrice.equals(u_redNum[0] + u_redNum[1] + u_redNum[2] + u_redNum[3] + u_redNum[4] + u_redNum[5])) {
+			money =  (int) (poolmoney*0.05);
+			return money;
+		} else if (price3000.equals(u_redNum[0] + u_redNum[1] + u_redNum[2] + u_redNum[3] + u_redNum[4] + u_buleNum)) {
+			money = 3000;
+			return money;
+		} else if (price500.equals(u_redNum[0] + u_redNum[1] + u_redNum[2] + u_redNum[3] + u_redNum[4])) {
+			money = 500;
+			return money;
+		} else if (price200.equals(u_redNum[0] + u_redNum[1] + u_redNum[2] + u_redNum[3] + u_buleNum)) {
+			money = 200;
+			return money;
+		} else if (price20.equals(u_redNum[0] + u_redNum[1] + u_redNum[2] + u_redNum[3])) {
+			money = 20;
+			return money;
+		} else if (price10.equals(u_redNum[0] + u_redNum[1] + u_redNum[2] + u_buleNum)) {
+			money = 10;
+			return money;
+		} else if (price5.equals(u_buleNum)) {
+			money = 5;
+			return money;
+		}
+
+		return money;
+	}
+
+	@Override
+	public List<User_lottery> getByTime(String time, Connection conn) throws SQLException {
+		List<User_lottery> uList = new ArrayList<>();
+		
+		String sql = "select * from user_lottery where ltime = ?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setString(1, time);
+		ResultSet rs = ps.executeQuery();
+		User_lottery ul = null;
+		while(rs.next()) {
+			ul = new User_lottery();
+			ul.setBuycount(rs.getInt("buycount"));
+			ul.setBuytime(rs.getString("buytime"));
+			ul.setId(rs.getInt("id"));
+			ul.setLtime(rs.getString("ltime"));
+			ul.setSelectednum(rs.getString("selectednum"));
+			ul.setUid(rs.getInt("uid"));
+			ul.setWinmoney(rs.getDouble("winmoney"));
+			uList.add(ul);
+		}
+		return uList;
+	}
+
+	@Override
+	public double getSumByTime(String time, Connection conn) throws SQLException {
+		String sql = "select sum(winmoney) from user_lottery where ltime = ?";
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ps.setString(1, time);
+		ResultSet rs = ps.executeQuery();
+		if(rs.next()) {
+			return rs.getDouble(1);
+		}
+		return 0;
+	}
+
+
+
+
+}

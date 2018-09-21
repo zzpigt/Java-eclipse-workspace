@@ -1,0 +1,24 @@
+package com.bwf.client;
+
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
+import com.bwf.jar.MyResponse;
+
+public class GreffierMenu {
+	
+	ObjectOutputStream oos;
+	MyResponse lastResponse;
+
+	public GreffierMenu(ObjectOutputStream oos, MyResponse lastResponse) {
+		this.oos = oos;
+		this.lastResponse = lastResponse;
+	}
+
+	public void greffierMenu(String uName) throws IOException {
+		
+		
+		
+	}
+
+}

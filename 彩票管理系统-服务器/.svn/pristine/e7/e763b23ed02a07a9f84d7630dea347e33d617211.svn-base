@@ -1,0 +1,61 @@
+package com.bwf.test;
+
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+import com.bwf.database.ConnectionFactory;
+import com.mchange.v2.c3p0.util.ConnectionEventSupport;
+
+public class Test {
+
+	public static void main(String[] args) {
+		//测试数据库连接
+//		test1();
+		test2();
+		
+	}
+	
+	public static void test1() {
+		Connection conn = ConnectionFactory.getConnection();
+		System.out.println(conn);
+	}
+	
+	public static void test2() {
+		StringBuilder sb = new StringBuilder();
+		List<Integer> numAll = new ArrayList<>();
+		boolean isHere = true;
+		for(int i = 0; i < 6;i++) {
+			int num = new Random().nextInt(32)+1;//随机产生一个数【1-32】
+			for (int j : numAll) {
+				if(j == num) {
+					isHere = false;
+					break;
+				}
+			}
+			if(isHere) {
+				numAll.add(num);
+			}
+		}
+		Collections.sort(numAll);
+		for (int i = 0; i < numAll.size(); i++) {
+			if(numAll.get(i) < 10) {
+				sb.append("0").append(numAll.get(i));
+			}else {
+				sb.append(numAll.get(i));
+			}
+			if(i < numAll.size()-1) {
+				sb.append("-");
+			}
+		}
+		int endNum = new Random().nextInt(16)+1;
+		if(endNum < 10) {
+			sb.append(":0").append(endNum);
+		}else {
+			sb.append(":").append(endNum);
+		}
+		System.out.println(sb.toString());
+	}
+}

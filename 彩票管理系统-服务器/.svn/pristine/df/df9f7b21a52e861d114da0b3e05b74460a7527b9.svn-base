@@ -1,0 +1,127 @@
+package com.bwf.service.impl;
+
+import java.io.ObjectOutputStream;
+import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.bwf.bean.Lottery_info;
+import com.bwf.bean.User;
+import com.bwf.dao.Lottery_infoDao;
+import com.bwf.dao.UserDao;
+import com.bwf.dao.impl.AdminDaoImpl;
+import com.bwf.database.ConnectionFactory;
+import com.bwf.jar.MyRequest;
+import com.bwf.jar.MyResponse;
+import com.bwf.service.AdminService;
+
+public class AdminServiceImpl implements AdminService {
+
+	private Lottery_infoDao ld;
+	private UserDao ud;
+	private List<String> list = new ArrayList<>();
+
+	public void setLd(Lottery_infoDao ld) {
+		this.ld = ld;
+	}
+
+	public void setUd(UserDao ud) {
+		this.ud = ud;
+	}
+
+	@Override
+	public MyResponse doIssue(MyRequest request, ObjectOutputStream oos) throws Exception {
+		Connection conn = ConnectionFactory.getConnection();
+		// 查看是否有未开奖彩票
+		String datetime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		Lottery_info lastMeg = ld.getNotLastMeg(conn);
+		MyResponse response = new MyResponse(MyResponse.TYPE_ADMIN_ISSUE);
+		if (lastMeg.getState() == 1|| !lastMeg.getTime().equals(datetime)) {
+
+			Double issuePrice = Double.parseDouble(request.getUmap().get(MyRequest.LOTTERY_NEWPRICE));
+			Lottery_info li = new Lottery_info();
+			li.setTime(datetime);
+			li.setPrice(issuePrice);
+			li.setSellnum(0);
+			li.setState(0);
+			// 从上一次的奖池中取出余额放入新的一期
+
+			li.setPoolmoney(lastMeg.getPoolmoney());
+			// 设置上一期奖池金额为0
+			lastMeg.setPoolmoney(0.0);
+			ld.update(lastMeg, conn);
+			li.setWinnum("未开奖");
+			System.out.println(li.toString());
+			ld.insert(li, conn);
+			List<String> list = ld.queryAllLottery(conn);
+			response.setHistoryList(list);
+			response.setIssue(true);
+			response.setSuccess(true);
+			response.getrMeg().put(MyResponse.MEG_CONTENT, "发布新一期彩票成功");
+		} else {
+			response.setIssue(false);
+			response.setSuccess(false);
+			response.getrMeg().put(MyResponse.MEG_CONTENT, "无法发布,上一期尚未开奖或一天重复发行了");
+
+		}
+		oos.writeObject(response);
+		oos.flush();
+		return response;
+	}
+
+	@Override
+	public MyResponse doFindBuyer(MyRequest request, ObjectOutputStream oos) throws Exception {
+		Connection conn = ConnectionFactory.getConnection();
+		int id = Integer.parseInt(request.getUmap().get(MyRequest.ADMIN_BUYERID));
+		User u = ud.querybyid(id, conn);
+		MyResponse response = new MyResponse(MyResponse.TYPE_ADMIN_FINDBUYER);
+		if (u.getId() != null) {
+			StringBuilder sb = new StringBuilder(String.valueOf(u.getId()));
+			sb.append("\t" + u.getName());
+			sb.append("\t" + u.getPwd());
+			sb.append("\t" + u.getMoney());
+
+			response.setSuccess(true);
+			list.add(String.valueOf(sb));
+			response.setHistoryList(list);
+
+		} else {
+
+			response.setSuccess(false);
+		}
+
+		oos.writeObject(response);
+		oos.flush();
+		return response;
+	}
+
+	@Override
+	public MyResponse doSortBuyerById(MyRequest request, ObjectOutputStream oos) throws Exception {
+		Connection conn = ConnectionFactory.getConnection();
+		list = ud.SortBuyerById(conn);
+		System.out.println(list + "按照id排序");
+		MyResponse response = new MyResponse(MyResponse.TYPE_ADMIN_SORTBUYER_BYID);
+		response.setSuccess(true);
+		response.setHistoryList(list);
+
+		oos.writeObject(response);
+		oos.flush();
+		return response;
+	}
+
+	@Override
+	public MyResponse doSortBuyerByMoney(MyRequest request, ObjectOutputStream oos) throws Exception {
+		Connection conn = ConnectionFactory.getConnection();
+		list = ud.SortBuyerByMoney(conn);
+		MyResponse response = new MyResponse(MyResponse.TYPE_ADMIN_SORTBUYER_BYMONEY);
+		response.setSuccess(true);
+		response.setHistoryList(list);
+
+		oos.writeObject(response);
+		oos.flush();
+		return response;
+	}
+
+}

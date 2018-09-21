@@ -1,0 +1,258 @@
+package com.bwf.service.impl;
+
+import java.io.ObjectOutputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import com.bwf.bean.Lottery_info;
+import com.bwf.bean.User;
+import com.bwf.bean.User_lottery;
+import com.bwf.dao.Lottery_infoDao;
+import com.bwf.dao.UserDao;
+import com.bwf.dao.User_lotteryDao;
+import com.bwf.database.ConnectionFactory;
+import com.bwf.jar.MyRequest;
+import com.bwf.jar.MyResponse;
+import com.bwf.service.AdminService;
+
+public class AdminServiceImpl implements AdminService {
+
+	private Lottery_infoDao ld;
+	private UserDao ud;
+	private User_lotteryDao uld;
+	private List<String> list = new ArrayList<>();
+
+	public void setLd(Lottery_infoDao ld) {
+		this.ld = ld;
+	}
+
+	public void setUd(UserDao ud) {
+		this.ud = ud;
+	}
+
+	public void setUld(User_lotteryDao uld) {
+		this.uld = uld;
+	}
+
+	private void addLotteryMeg(MyResponse response) throws Exception {
+		Lottery_info li = null;
+		Connection conn = ConnectionFactory.getConnection();
+		li = ld.getLastMeg(conn);
+		System.out.println(li);
+		if (li != null) {
+			response.setIssue(true);
+			response.setState(false);
+
+		} else {
+			response.setIssue(false);
+			response.setState(true);
+			response.getrMeg().put(MyResponse.LETTERY_CONTENT, "没有正在发行的彩票信息");
+		}
+
+	}
+
+	@Override
+	public MyResponse doIssue(MyRequest request, ObjectOutputStream oos) throws Exception {
+		Connection conn = null;
+		try {
+
+			conn = ConnectionFactory.getConnection();
+			conn.setAutoCommit(false);
+			// 查看是否有未开奖彩票
+			String datetime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+			Lottery_info lastMeg = ld.getNotLastMeg(conn);
+			MyResponse response = new MyResponse(MyResponse.TYPE_ADMIN_ISSUE);
+			if (lastMeg.getState() == 1 || !lastMeg.getTime().equals(datetime)) {
+
+				Double issuePrice = Double.parseDouble(request.getUmap().get(MyRequest.LOTTERY_NEWPRICE));
+				Lottery_info li = new Lottery_info();
+				li.setTime(datetime);
+				li.setPrice(issuePrice);
+				li.setSellnum(0);
+				li.setState(0);
+				// 从上一次的奖池中取出余额放入新的一期
+
+				li.setPoolmoney(lastMeg.getPoolmoney());
+				// 设置上一期奖池金额为0
+				lastMeg.setPoolmoney(0.0);
+				ld.update(lastMeg, conn);
+				li.setWinnum("本期彩票未开奖,请等待");
+				System.out.println(li.toString());
+				ld.insert(li, conn);
+				List<String> list = ld.queryAllLottery(conn);
+				response.setHistoryList(list);
+				response.setIssue(true);
+				response.setSuccess(true);
+				response.getrMeg().put(MyResponse.MEG_CONTENT, "发布新一期彩票成功");
+			} else {
+				response.setIssue(false);
+				response.setSuccess(false);
+				response.getrMeg().put(MyResponse.MEG_CONTENT, "无法发布,上一期尚未开奖或一天重复发行了");
+
+			}
+			conn.commit();
+			oos.writeObject(response);
+			oos.flush();
+			return response;
+		} catch (SQLException e) {
+			conn.rollback();
+			e.printStackTrace();
+		} finally {
+			conn.close();
+		}
+		return null;
+	}
+
+	@Override
+	public MyResponse doFindBuyer(MyRequest request, ObjectOutputStream oos) throws Exception {
+		Connection conn = ConnectionFactory.getConnection();
+		int id = Integer.parseInt(request.getUmap().get(MyRequest.ADMIN_BUYERID));
+		User u = ud.querybyid(id, conn);
+		MyResponse response = new MyResponse(MyResponse.TYPE_ADMIN_FINDBUYER);
+		if (u.getId() != null) {
+			list = new ArrayList<>();
+			StringBuilder sb = new StringBuilder(String.valueOf(u.getId()));
+			sb.append("\t" + u.getName());
+			sb.append("\t" + u.getPwd());
+			sb.append("\t" + u.getMoney());
+			sb.append("\t" + u.getState());
+			response.setSuccess(true);
+			list.add(String.valueOf(sb));
+			response.setHistoryList(list);
+
+		} else {
+
+			response.setSuccess(false);
+		}
+		System.out.println(response.getHistoryList());
+		oos.writeObject(response);
+		oos.flush();
+		conn.close();
+		return response;
+	}
+
+	@Override
+	public MyResponse doSortBuyerById(MyRequest request, ObjectOutputStream oos) throws Exception {
+		Connection conn = ConnectionFactory.getConnection();
+		list = ud.SortBuyerById(conn);
+		System.out.println(list + "按照id排序");
+		MyResponse response = new MyResponse(MyResponse.TYPE_ADMIN_SORTBUYER_BYID);
+		response.setSuccess(true);
+		response.setHistoryList(list);
+
+		oos.writeObject(response);
+		oos.flush();
+		conn.close();
+		return response;
+	}
+
+	@Override
+	public MyResponse doSortBuyerByMoney(MyRequest request, ObjectOutputStream oos) throws Exception {
+		Connection conn = ConnectionFactory.getConnection();
+		list = ud.SortBuyerByMoney(conn);
+		MyResponse response = new MyResponse(MyResponse.TYPE_ADMIN_SORTBUYER_BYMONEY);
+		response.setSuccess(true);
+		response.setHistoryList(list);
+
+		oos.writeObject(response);
+		oos.flush();
+		conn.close();
+		return response;
+	}
+
+	@Override
+	public MyResponse doShowLotteryMeg(MyRequest request, ObjectOutputStream oos) throws Exception {
+		Connection conn = ConnectionFactory.getConnection();
+		list = ld.queryAllLottery(conn);
+
+		MyResponse response = new MyResponse(MyResponse.TYPE_GREFFIER_SHOWLOTTERYMEG);
+		response.setHistoryList(list);
+		response.getrMeg().put(MyResponse.MEG_CONTENT, "显示所有彩票信息");
+		// 顺带查询一下有没有未发行的彩票
+		System.out.println(response);
+		addLotteryMeg(response);
+		oos.writeObject(response);
+		oos.flush();
+		conn.close();
+		return response;
+	}
+
+	@Override
+	public MyResponse doDrawLottery(MyRequest request, ObjectOutputStream oos) throws Exception {
+		Connection conn = null;
+		try {
+			conn = ConnectionFactory.getConnection();
+			conn.setAutoCommit(false);
+			// 先查看是否可以开奖
+			Lottery_info lastMeg = ld.getLastMeg(conn);
+			MyResponse response = null;
+			if (lastMeg != null) {
+				// 可以开奖（lottery_info:state->1 winnum->传送的信息有 poolmoney->减少 | user_lottery:
+				// winmoney->计算 ）
+				String winNum = request.getUmap().get(MyRequest.LOTTERY_WINNUM);// 开奖号码
+				Double poolmoney = lastMeg.getPoolmoney();// 奖池金额
+				String time = lastMeg.getTime();// 期号
+
+				// 先拿到所有的这期买的用户信息
+				List<User_lottery> uList = uld.getByTime(time, conn);
+
+				// 更新彩民的winmoney信息
+				uld.updataWinmoneyByTimeAndWinnum(uList, winNum, poolmoney, time, conn);
+
+				// 拿到中奖的用户信息uid-winmoney
+				Map<Integer, Double> uMap = uld.getWinmoneyByTime(time, conn);
+
+				// 更新用户余额
+				Iterator<Entry<Integer, Double>> iterator = uMap.entrySet().iterator();
+				while (iterator.hasNext()) {
+					Entry<Integer, Double> next = iterator.next();
+					ud.updateMoneyById(next.getKey(), next.getValue(), conn);
+				}
+
+				// 拿到这期彩民中奖的总钱数
+				double sumMoney = uld.getSumByTime(time, conn);
+				// 更新最新的彩票信息
+				ld.updataStateWinnumPoolmoneyByTime(time, winNum, sumMoney, conn);
+				// 提交
+				response = new MyResponse(MyResponse.TYPE_GREFFIER_DRAWLOTTERY);
+				response.setState(true);
+				response.getrMeg().put(MyResponse.MEG_CONTENT, "开奖成功！！！");
+
+			} else {
+				// 不能开奖，等待发行
+				response = new MyResponse(MyResponse.TYPE_GREFFIER_DRAWLOTTERY);
+				response.setState(false);
+				response.getrMeg().put(MyResponse.MEG_CONTENT, "尚未发行，请耐性等待！！");
+
+			}
+			addLotteryMeg(response);
+			oos.writeObject(response);
+			oos.flush();
+
+			conn.commit();
+
+		} catch (SQLException e) {
+			conn.rollback();
+			e.printStackTrace();
+		} finally {
+			conn.close();
+		}
+
+		return null;
+	}
+
+	@Override
+	public MyResponse doAdminLogout(MyRequest request, ObjectOutputStream oos) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,10 @@
+package com.bwf.dao;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import com.bwf.bean.Admin;
+
+public interface AdminDao extends BaseDao<Admin> {
+	Admin getByNameAndPwd(int levelNum, String uName, String uPwd, Connection conn) throws SQLException;
+}

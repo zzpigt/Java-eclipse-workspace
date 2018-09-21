@@ -1,0 +1,19 @@
+package com.bwf.client;
+
+import java.io.ObjectOutputStream;
+
+import com.bwf.jar.MyResponse;
+
+public class AdminMenu {
+	private ObjectOutputStream oos;
+	private MyResponse lastResponse;
+	
+	public AdminMenu(ObjectOutputStream oos,MyResponse lastResponse) {
+		this.oos = oos;
+		this.lastResponse = lastResponse;
+	}
+	
+	
+	
+	
+}

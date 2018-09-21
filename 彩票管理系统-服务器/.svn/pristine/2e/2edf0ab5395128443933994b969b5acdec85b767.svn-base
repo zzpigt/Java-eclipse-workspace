@@ -1,0 +1,29 @@
+package com.bwf.service.impl;
+
+import java.io.ObjectOutputStream;
+
+import com.bwf.jar.MyRequest;
+import com.bwf.jar.MyResponse;
+import com.bwf.service.AdminService;
+
+public class AdminServiceImpl implements AdminService{
+
+	@Override
+	public MyResponse doIssue(MyRequest request, ObjectOutputStream oos) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MyResponse doFindBuyer(MyRequest request, ObjectOutputStream oos) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MyResponse doSortBuyer(MyRequest request, ObjectOutputStream oos) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

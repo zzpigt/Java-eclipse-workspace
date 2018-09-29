@@ -1,0 +1,138 @@
+
+ “万物皆对象” - 万物皆  是   对象 
+                      is - a  
+                      extends
+【Object类】
+
+ java.lang.Object - 对象，java中所有类型的父类
+
+ * java.lang 
+  java的语言包，使用这个包中的类不需要导包
+
+ 1. 构造器
+  Object只有一个默认的无参构造
+
+ 2. 方法
+
+  protected Object clone()
+ 	创建并返回此对象的一个副本。
+
+	问题：重写父类方法时，能不能修改访问修饰符？
+	看情况，访问范围只能变大，不能变小
+
+
+  boolean equals(Object obj) 
+	判断两个对象是否“相等”
+	
+	equals的默认实现就是==，本质就是判断2个引用是否指向同一个对象
+	
+	但是可以通过重写equals方法修改它的实现过程（比较依据）
+
+  protected void finalize()
+
+	1. 垃圾：没有引用指向的对象
+
+	2. 当这种对象被回收时，就会调用一次此方法
+
+	3. 默认没有实现过程
+
+	4. 可以通过重写这个方法，在对象被回收时，顺便回收一些别的垃圾对象
+	很不建议这样做
+	
+	
+  Class<?> getClass() 
+
+	返回类对象
+
+
+  int hashCode() 
+	 返回该对象的哈希码值。
+
+	3个规定：
+	1. 同一个对象，多次调用hashCode结果【必须】一致
+	2. equals认为相等的对象，hashCode的结果【必须】一致
+	3. equals认为不相等的对象，hashCode的结果【最好】不一致
+
+	* 只要重写了equals方法，第2个规定必然会不满足
+	所以重写equals必须也重写hashCode方法，使得其满足条件2
+
+
+  String toString()
+	变成字符串
+	默认实现 类名@哈希值
+
+	往往可以通过重写这个方法，来打印出对象的成员属性的值，方便调试程序
+
+
+	* 问题：
+	为什么 String、StringBuilder、StringBuffer 对象直接打印的时候是内容，
+	而我自己写的Student类 打印出来却是 com.bwf.Student@65fea7 ?  
+	因为这些类型已经重写过toString方法了，而我自己的类没有重写
+
+
+	* 问题
+	为什么 String类型比较内容要用equals方法，而我自己的类用equals和==是一样的？
+	因为 String 类型已经重写过 equals方法了
+
+
+   void notify()  
+   void notifyAll() 
+   void wait()
+   void wait(long timeout)  
+   void wait(long timeout, int nanos)  
+	都是在线程控制中使用，以后再说
+
+
+【基本类型与对应的包装类】
+
+ Object类不是基本类型的父类，所以基本类型不能使用Object里定义的功能
+ 每一种基本类型设计了对应的引用类型，这种引用类型叫做包装类
+
+ 基本类型	包装类型
+ byte		Byte
+ short		Short
+ int 		Integer
+ long		Long
+ float		Float
+ double		Double
+ char		Character
+ boolean	Boolean
+
+ 1. 基本类型和包装类型的转换
+
+ 2. 自动装箱和拆箱
+
+ 3. 包装类的作用
+
+ 4. 常见面试题
+
+
+【日期与时间的处理】
+
+ 1. java.util.Date
+	特定的瞬间，精确到毫秒
+
+ 2. java.text.SimpleDateFormat
+	格式化Date对象
+
+ 3. java.util.Calendar
+	日历
+
+ 常用操作
+	1. 日期格式化成指定格式字符串
+
+	2. 指定格式字符串解析成日期
+
+	3. 打印任意日期的任意属性
+
+	
+
+
+
+
+
+
+
+
+
+
